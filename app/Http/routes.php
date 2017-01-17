@@ -20,8 +20,17 @@ Route::group(['middleware' => 'web'], function () {
     Route::auth();
     Route::get('/home', 'HomeController@index');
 
-    Route::get('/migrate', 'InvoicesController@migrate');
-    Route::auth();
-
+    Route::get('invoice', [
+        'middleware' => ['auth'],
+        'uses' => 'InvoicesController@index'
+    ]);
+    Route::get('/invoice/details', [
+        'middleware' => ['auth'],
+        'uses' => 'InvoicesController@invoiceDetails'
+    ]);
+    Route::get('/invoice/details/{id}', [
+        'middleware' => ['auth'],
+        'uses' => 'InvoicesController@invoiceDetails'
+    ]);
 });
 

@@ -1,2 +1,6 @@
-// @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
+@import "_global/global";
+@import "_global/navbar";
+@import "_global/clearable";
+@import "_global/typeahead";

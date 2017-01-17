@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Invoice;
 
 /**
  * Class Client
@@ -48,5 +49,9 @@ class Client extends Model
 
     protected $guarded = [];
 
-        
+    public function invoices()
+    {
+        return $this->hasMany('App\Models\Invoice');
+    }
+
 }

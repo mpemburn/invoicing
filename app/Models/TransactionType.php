@@ -17,7 +17,7 @@ class TransactionType extends Model
         'description',
         'is_expense',
         'is_invoice',
-        'is_oositive',
+        'is_positive',
         'js_function',
         'required_controls'
     ];

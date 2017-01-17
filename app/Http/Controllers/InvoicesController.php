@@ -18,7 +18,15 @@ class InvoicesController extends Controller
      */
     public function index()
     {
-        //
+        $invoices = Invoice::all()
+            ->sortByDesc('id');
+
+        return view('invoice_list', ['invoices' => $invoices]);
+    }
+
+    public function invoiceDetails($id)
+    {
+        return $id;
     }
 
     /**

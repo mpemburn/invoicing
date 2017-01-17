@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\Client;
 /**
  * Class Invoice
  */
@@ -30,5 +30,7 @@ class Invoice extends Model
 
     protected $guarded = [];
 
-        
-}
+    public function client()
+    {
+        return $this->belongsTo('App\Models\Client');
+    }}
