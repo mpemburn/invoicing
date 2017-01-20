@@ -161,6 +161,10 @@ return [
          * */
         Zizaco\Entrust\EntrustServiceProvider::class,
 
+        App\Providers\TransactionServiceProvider::class,
+
+        Way\Generators\GeneratorsServiceProvider::class,
+        Xethron\MigrationsGenerator\MigrationsGeneratorServiceProvider::class,
     ],
 
     /*
@@ -206,7 +210,15 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        // Zizaco Entrust Facade
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
+        // Custom Helper Classes
+        'Utility' => App\Helpers\Utility::class,
+        // Custom Facades
+        'AppAuth' => \App\Facades\AppAuth::class,
+        'Rbac' => \App\Facades\Rbac::class,
+        'Roles' => \App\Facades\Roles::class,
+        'Transactions' => \App\Facades\Transactions::class,
 
     ],
 

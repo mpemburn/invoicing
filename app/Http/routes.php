@@ -11,15 +11,15 @@
 |
 */
 
+Route::auth();
+Route::get('/home', 'HomeController@index');
+Route::get('/', function () {
+    return view('home');
+});
+
+
+// Auth protected routes
 Route::group(['middleware' => 'web'], function () {
-    Route::get('/', function () {
-        return view('home');
-    });
-
-
-    Route::auth();
-    Route::get('/home', 'HomeController@index');
-
     Route::get('invoice', [
         'middleware' => ['auth'],
         'uses' => 'InvoicesController@index'

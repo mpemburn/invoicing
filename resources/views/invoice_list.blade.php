@@ -24,11 +24,11 @@
                     <td>{{ $invoice->client->first_name }} {{ $invoice->client->last_name }}</td>
                     <td>{{ $invoice->client->company }}</td>
                     <td>{{ $invoice->project }}</td>
-                    <td>{{ \App\Helpers\Utility::formatDate('M j, Y', $invoice->invoice_date) }}</td>
-                    <td>{{ \App\Helpers\Utility::formatDate('M j, Y', $invoice->billed_date) }}</td>
+                    <td>{{ Utility::formatMjY($invoice->invoice_date) }}</td>
+                    <td>{{ Utility::formatMjY($invoice->billed_date) }}</td>
                     <td></td>
                     <td></td>
-                    <td>{{ \App\Helpers\Utility::formatDate('M j, Y', $invoice->paid_date) }}</td>
+                    <td>{{ Utility::formatMjY($invoice->paid_date) }}</td>
                     <td class="right">{{ $invoice->total_hours }}</td>
                     <td></td>
                 </tr>

@@ -5816,6 +5816,8 @@ table.dataTable tbody td {
   border-bottom: 1px solid #999 !important; }
   table.dataTable tbody td.nobr {
     white-space: nowrap; }
+  table.dataTable tbody td.right {
+    text-align: right; }
 
 table.dataTable tbody tr:hover {
   background-color: #999999;

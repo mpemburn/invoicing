@@ -33,7 +33,7 @@
 
             <!-- Branding Image -->
             <a class="navbar-brand" href="{{ url('/') }}">
-                ASW Roster
+                Invoicing
             </a>
         </div>
 
