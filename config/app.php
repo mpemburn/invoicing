@@ -157,6 +157,11 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         /*
+         * DomPDF Service Provider
+         * */
+        Barryvdh\DomPDF\ServiceProvider::class,
+
+        /*
          * Zizaco Entrust Service Provider
          * */
         Zizaco\Entrust\EntrustServiceProvider::class,
@@ -212,6 +217,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         // Zizaco Entrust Facade
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
+        // DOMPDF Facade
+        'PDF' => Barryvdh\DomPDF\Facade::class,
         // Custom Helper Classes
         'Utility' => App\Helpers\Utility::class,
         // Custom Facades

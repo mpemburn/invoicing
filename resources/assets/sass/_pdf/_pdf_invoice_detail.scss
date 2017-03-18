@@ -1,0 +1,48 @@
+.invoice-header {
+  position: relative;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 10px;
+
+  .client-address,
+  .date-total {
+    position: relative;
+    height: 80px;
+    padding: 15px;
+    vertical-align: top;
+    border: 1px solid #111;
+    font-weight: bold;
+
+    .attn {
+      margin-top: 8px;
+    }
+  }
+  .date-total {
+    table {
+      position: relative;
+      top: 40px;
+    }
+  }
+}
+
+.invoice-lineitems {
+  position: relative;
+
+  table {
+    width: 100%;
+    tr {
+      &.even {
+        background-color: #dddddd;
+      }
+    }
+
+    tbody tr.paid {
+      font-weight: bold;
+
+      td {
+        border-top: 1px solid #111111;
+        border-bottom: 1px solid #111111;
+      }
+    }
+  }
+}

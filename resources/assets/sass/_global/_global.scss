@@ -1,6 +1,6 @@
 /* Sass file containing all global styles */
 body {
-  font-family: 'Arial';
+  font-family: 'Arial', SansSerif;
 }
 
 input {
@@ -43,16 +43,17 @@ tbody tr {
 }
 
 tbody tr:hover {
-  background-color: #999999;
-  color: #fff;
+  background-color: #dddddd;
+  color: #000000;
   cursor: pointer !important;
   a {
-    color: #fff;
+    color: #000000;
   }
 }
 
 tbody td {
   padding: 4px;
+  vertical-align: top;
   text-align: left;
   font-size: 9pt;
 }
@@ -128,19 +129,30 @@ table.dataTable {
       &.right {
         text-align: right;
       }
+      &.red {
+        color: #ff0000;
+      }
     }
     tr {
-
       &:hover {
-        background-color: #999999;
-        color: #fff;
+        vertical-align: top;
+        background-color: #dddddd;
+        color: #000000;
         cursor: pointer !important;
         a {
-          color: #fff;
+          color: #000000;
         }
       }
     }
   }
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.text-italic {
+  font-style: italic;
 }
 
 .dataTables_filter {

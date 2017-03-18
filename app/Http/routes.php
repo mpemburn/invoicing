@@ -32,5 +32,9 @@ Route::group(['middleware' => 'web'], function () {
         'middleware' => ['auth'],
         'uses' => 'InvoicesController@invoiceDetails'
     ]);
+    Route::get('/invoice/pdf/{id}', [
+        'middleware' => ['auth'],
+        'uses' => 'InvoicesController@invoicePdf'
+    ]);
 });
 

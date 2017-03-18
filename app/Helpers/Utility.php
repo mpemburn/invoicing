@@ -8,6 +8,13 @@ class Utility {
 		return (empty($date)) ? $date : date($mask, strtotime($date));
 	}
 
+	public static function formatDollars($dollars)
+	{
+		$dollars = (is_null($dollars)) ? 0 : $dollars;
+		$formatted = number_format(abs($dollars), ...config('invoicing.dollar_format'));
+		return ($dollars >= 0) ? '$' . $formatted : '($' . $formatted . ')';
+	}
+
 	public static function formatMjY($date) {
 		return self::formatDate('M j, Y', $date);
 	}

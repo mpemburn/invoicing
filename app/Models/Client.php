@@ -54,4 +54,33 @@ class Client extends Model
         return $this->hasMany('App\Models\Invoice');
     }
 
+    public function getAttentionAttribute($value)
+    {
+        $attn = ($this->use_attn) ? 'Attn: ' : '';
+        $care_of = ($this->use_care_of) ? 'Care of: ' : '';
+        $attn_line = ($this->use_attn || $this->care_of) ? $attn . $care_of . $this->full_name : '';
+
+        return (empty($attn_line)) ? '' : $attn_line;
+    }
+
+    public function getCityStateZipAttribute($value)
+    {
+        return $this->city . ', ' . $this->state . ' ' . $this->zip_code;
+    }
+
+    public function getFullNameAttribute($value)
+    {
+        $middle = (empty($this->middle_name)) ? '' : $this->middle_name . ' ';
+        return $this->first_name . ' ' . $middle . $this->last_name;
+    }
+
+    public function getTopLineAttribute($value)
+    {
+        return (empty($this->company)) ? $this->full_name : $this->company;
+    }
+
+    public function getZipCodeAttribute($value)
+    {
+        return preg_replace('/(.{5})(.{4})/', '\1-\2', $this->zip);
+    }
 }

@@ -1,0 +1,39 @@
+body {
+  font-family: Helvetica;
+}
+
+p {
+  margin: 0;
+  margin-bottom: 5px;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+thead td {
+  padding: 4px;
+  text-align: left;
+  font-size: 9pt;
+  background-color: #999999;
+  color: #fff;
+}
+
+tbody tr {
+  border-bottom: 1px solid #999;
+}
+
+tbody td {
+  padding: 4px;
+  vertical-align: top;
+  text-align: left;
+  font-size: 9pt;
+
+  .even {
+    //background-color: #bbbbbb;
+  }
+}
+
+.text-right {
+  text-align: right;
+}

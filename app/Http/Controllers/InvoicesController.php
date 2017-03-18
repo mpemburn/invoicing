@@ -8,6 +8,8 @@ use App\Models\BillingRate;
 use App\Http\Requests;
 use App\Models\Invoice;
 use App\Models\InvoiceLineItem;
+use Barryvdh\DomPDF\PDF;
+use Illuminate\Support\Facades\App;
 
 class InvoicesController extends Controller
 {
@@ -26,7 +28,29 @@ class InvoicesController extends Controller
 
     public function invoiceDetails($id)
     {
-        return $id;
+        $invoice = Invoice::find($id);
+
+        return view('invoice_detail', [
+            'invoice' => $invoice,
+            'client' => $invoice->client_data,
+            'line_items' => $invoice->line_items
+        ]);
+    }
+
+    public function invoicePdf($id)
+    {
+        $invoice = Invoice::find($id);
+        $view = view('invoice_pdf', [
+            'invoice' => $invoice,
+            'client' => $invoice->client_data,
+            'line_items' => $invoice->line_items
+        ]);
+
+        $html = $view->render();
+
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadHTML($html);
+        return $pdf->stream();
     }
 
     /**

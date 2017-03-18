@@ -23,6 +23,8 @@ elixir(function(mix) {
         mix.copy(directory, directories[directory]);
     }
     mix.sass('app.scss', 'public/css/all.css');
+    // Create a special style file for DomPDF documents
+    mix.sass('pdf.scss', 'public/css/pdf.css');
     mix.scripts([
         'resources/assets/js/jquery/**/*.js',
         'resources/assets/js/lib/**/*.js',

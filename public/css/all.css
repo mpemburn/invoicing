@@ -5732,7 +5732,7 @@ button.close {
 
 /* Sass file containing all global styles */
 body {
-  font-family: 'Arial'; }
+  font-family: 'Arial', SansSerif; }
 
 input {
   border: 1px solid #111;
@@ -5763,14 +5763,15 @@ tbody tr {
   border-bottom: 1px solid #999; }
 
 tbody tr:hover {
-  background-color: #999999;
-  color: #fff;
+  background-color: #dddddd;
+  color: #000000;
   cursor: pointer !important; }
   tbody tr:hover a {
-    color: #fff; }
+    color: #000000; }
 
 tbody td {
   padding: 4px;
+  vertical-align: top;
   text-align: left;
   font-size: 9pt; }
 
@@ -5818,13 +5819,22 @@ table.dataTable tbody td {
     white-space: nowrap; }
   table.dataTable tbody td.right {
     text-align: right; }
+  table.dataTable tbody td.red {
+    color: #ff0000; }
 
 table.dataTable tbody tr:hover {
-  background-color: #999999;
-  color: #fff;
+  vertical-align: top;
+  background-color: #dddddd;
+  color: #000000;
   cursor: pointer !important; }
   table.dataTable tbody tr:hover a {
-    color: #fff; }
+    color: #000000; }
+
+.text-bold {
+  font-weight: bold; }
+
+.text-italic {
+  font-style: italic; }
 
 .dataTables_filter input {
   padding: 0 5px;
@@ -5972,5 +5982,19 @@ table.dataTable tbody tr:hover {
 
 .tt-suggestion p {
   margin: 0; }
+
+/* Pages */
+.invoice-header {
+  margin-bottom: 16px;
+  text-align: left; }
+  .invoice-header .client-address {
+    padding: 20px;
+    border: 1px solid #111;
+    font-weight: bold; }
+    .invoice-header .client-address .attn {
+      margin-top: 8px; }
+
+.invoice-lineitems table {
+  width: 100%; }
 
 /*# sourceMappingURL=all.css.map */

@@ -1,0 +1,20 @@
+.invoice-header {
+  margin-bottom: 16px;
+  text-align: left;
+
+  .client-address {
+    padding: 20px;
+    border: 1px solid #111;
+    font-weight: bold;
+
+    .attn {
+      margin-top: 8px;
+    }
+  }
+}
+
+.invoice-lineitems {
+  table {
+    width: 100%;
+  }
+}

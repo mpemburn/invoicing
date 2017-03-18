@@ -1,0 +1,81 @@
+<!-- Push any scripts needed for this page onto the stack -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Laravel</title>
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.css"/>
+    <link rel="stylesheet" href="http://invoicing.local/public/css/all.css">
+
+</head>
+<body id="pdf-layout">
+<div class="container">
+    <div class="content container">
+        <header class="invoice-header row col-sm-12">
+            <div>
+                <h3>Invoice No. 305</h3>
+            </div>
+            <div class="col-sm-4 client-address">
+                <div>Door Security Solutions Chesapeake</div>
+                <div>9097 Atlee Station Rd</div>
+                <div>Suite 204</div>
+                <div>Mechanicsville, VA 23116</div>
+                <div class="attn">Attn: Jim Fallows</div>
+            </div>
+            <div class="col-sm-4 row">
+                <div class="col-sm-4 text-right">Invoice Date:</div><div class="col-sm-8 text-bold">3/9/2005</div>
+                <div class="col-sm-4 text-right">Date Billed:</div><div class="col-sm-8 text-bold">7/1/2005</div>
+                <div class="col-sm-4 text-right">Date Paid:</div><div class="col-sm-8 text-bold">7/23/2005</div>
+            </div>
+            <div class="col-sm-4">
+                <div class="col-sm-4 text-right">Invoice Total:</div><div class="col-sm-8 text-bold">$150.00</div>
+                <div class="col-sm-4 text-right">Total Hours:</div><div class="col-sm-8 text-bold">3</div>
+                <div class="col-sm-4 text-right">Total Paid:</div><div class="col-sm-8 text-bold">($150.00)</div>
+            </div>
+        </header>
+        <main class="invoice-lineitems">
+            <table>
+                <thead>
+                <tr>
+                    <td>Item</td>
+                    <td>Description</td>
+                    <td class="text-right">Hours</td>
+                    <td class="text-right">Amount</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td><p>Monthly service for Feb, 2005: (on site 2/23/2004)
+                    </p><p>
+                    </p><p>On site 3 hours 2/23/2004
+                    </p><p>
+                    </p><p>a) Checked virus protection and ran anti-spyware on all PCs.  Found and eliminated 1 virus on Leonard's PC.
+                    </p><p>
+                    </p><p>b) Miscellaneous phone support: remaining email setup for remote personnel.</p></td>
+                    <td class="text-right">3</td>
+                    <td class="text-right">$150.00</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><p>Paid in Full 7/23/2005 </p></td>
+                    <td class="text-right"></td>
+                    <td class="text-right">($150.00)</td>
+                </tr>
+                </tbody>
+            </table>
+        </main>
+    </div>
+</div>
+</body>
+</html>

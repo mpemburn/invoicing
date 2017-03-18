@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Utility;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -31,6 +32,46 @@ class InvoiceLineItem extends Model
     ];
 
     protected $guarded = [];
+    protected $counter;
+    protected $parity;
 
-        
+    public function getDescriptionHtmlAttribute($value)
+    {
+        return '<p>' . str_replace("\n", '</p><p>', $this->description) . '</p>';
+    }
+
+    public function getDollarAmountAttribute($value)
+    {
+        return Utility::formatDollars($this->amount);
+    }
+
+    public function getItemHoursAttribute($value)
+    {
+        return ($this->hours != 0) ? $this->hours : '';
+    }
+
+    public function getCounterAttribute($value)
+    {
+        return $this->counter;
+    }
+
+    public function getPaidAttribute($value)
+    {
+        return ($this->amount < 0) ? 'paid' : '';
+    }
+
+    public function getParityAttribute($value)
+    {
+        return $this->parity;
+    }
+
+    public function setCounter($counter)
+    {
+        $this->counter = $counter;
+    }
+
+    public function setParity($counter)
+    {
+        $this->parity = ($counter % 2) ? 'odd' : 'even';
+    }
 }

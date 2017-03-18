@@ -31,7 +31,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
      */
     public function setUp()
     {
-        parent::setUp(); // Don't forget this!
+        parent::setUp();
 
         $this->prepareForTests();
     }
@@ -43,7 +43,10 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
      */
     private function prepareForTests()
     {
-        Artisan::call('migrate');
-        //Mail::pretend(true);
+        Artisan::call('migrate:refresh');
+        // Create bogus Client table
+        $factory = factory(App\Models\Client::class, 10)->create();
+        // Create bogus TransactionType table
+        factory(App\Models\TransactionType::class, 10)->create();
     }
 }

@@ -26,7 +26,7 @@
                     <td>{{ $invoice->project }}</td>
                     <td>{{ Utility::formatMjY($invoice->invoice_date) }}</td>
                     <td>{{ Utility::formatMjY($invoice->billed_date) }}</td>
-                    <td></td>
+                    <td class="right {{ ($invoice->outstanding_total !== 'PAID') ? 'red' : '' }}">{{ $invoice->outstanding_total }}</td>
                     <td></td>
                     <td>{{ Utility::formatMjY($invoice->paid_date) }}</td>
                     <td class="right">{{ $invoice->total_hours }}</td>
@@ -36,9 +36,9 @@
             </tbody>
         </table>
     </div>
-    @endsection
-            <!-- Push any scripts needed for this page onto the stack -->
-    @push('scripts')
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
-    <script src="{{ URL::to('/js/lib') }}/typeahead.bundle.min.js"></script>
-    @endpush
+@endsection
+        <!-- Push any scripts needed for this page onto the stack -->
+@push('scripts')
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+<script src="{{ URL::to('/js/lib') }}/typeahead.bundle.min.js"></script>
+@endpush
