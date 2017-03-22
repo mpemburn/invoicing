@@ -54,7 +54,9 @@ class Client extends Model
         return $this->hasMany('App\Models\Invoice');
     }
 
-    public static function getFullAddress($client_id)
+    /* Static methods *************************************/
+
+    public static function getFullAddressInfo($client_id)
     {
         $client = Client::find($client_id);
 

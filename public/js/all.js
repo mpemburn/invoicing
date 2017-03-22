@@ -65,6 +65,7 @@ var InvoiceDetail = {
     clientSelectList: null,
     clientModal: null,
     invoiceId: 0,
+    dateItem: null,
     detailsUrl: '',
     selectedClientId: null,
     init: function (options) {
@@ -110,6 +111,16 @@ var InvoiceDetail = {
             }
         });
     },
+    hideDates: function() {
+        var self = this;
+        $('[data-datetype]').each(function() {
+            if (this != self.dateItem) {
+                $(this).find('div').show();
+                $(this).find('input').hide();
+            }
+        });
+
+    },
     hydrateClient: function(data) {
         for (var key in data) {
             if (data.hasOwnProperty(key)) {
@@ -152,6 +163,33 @@ var InvoiceDetail = {
 
         $('#edit_client').on('click', function() {
             self.initClientModal();
+        });
+
+        $('[data-datetype]').on('click', function() {
+            var $dateItem = $(this).find('div');
+            var $dateInput = $(this).find('input');
+            var isVisible = $dateInput.is(':visible');
+            // Hide dates except for the current one
+            self.dateItem = this;
+            self.hideDates();
+            // Toggle visibility of just this date item
+            $dateItem.toggle(isVisible);
+            $dateInput.toggle(!isVisible);
+            $dateInput.datepicker()
+                .on('changeDate', function () {
+                    // Write the value from the input to the div
+                    var $dateItem = $(this).prev('div');
+                    var $dateInput = $(this);
+                    $dateItem.html($dateInput.val())
+                        .show();
+                    $dateInput.hide();
+                    $(this).datepicker('hide');
+                })
+                .focus();
+        });
+        $('[data-datetype] input').on('click', function(evt) {
+            evt.preventDefault();
+            return false;
         });
     },
     selectClientEvent: function() {

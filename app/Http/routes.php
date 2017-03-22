@@ -36,6 +36,10 @@ Route::group(['middleware' => 'web'], function () {
         'middleware' => ['auth'],
         'uses' => 'InvoicesController@setClient'
     ]);
+    Route::get('/invoice/save_form/{id}', [
+        'middleware' => ['auth'],
+        'uses' => 'InvoicesController@saveForm'
+    ])->name('saveForm');
     Route::get('/invoice/pdf/{id}', [
         'middleware' => ['auth'],
         'uses' => 'InvoicesController@invoicePdf'

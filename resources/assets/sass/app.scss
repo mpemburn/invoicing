@@ -1,10 +1,10 @@
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
+@import "_global/variables";
 @import "_global/global";
 @import "_global/navbar";
 @import "_global/clearable";
 @import "_global/typeahead";
-@import "_global/variables";
 
 /* Pages */
 @import "_page/invoice_detail";

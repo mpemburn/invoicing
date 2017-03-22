@@ -38,7 +38,8 @@ class InvoicesController extends Controller
             'invoice' => $invoice,
             'client' => $client_data,
             'line_items' => $invoice->line_items,
-            'clients' => Client::all()
+            'clients' => Client::all(),
+            'form_action' => route('saveForm', $id)
         ]);
     }
 
@@ -84,7 +85,7 @@ class InvoicesController extends Controller
         if ($is_new) {
             return json_encode(['invoice_id' => $invoice->id]);;
         } else {
-            $client_info = Client::getFullAddress($client_id);
+            $client_info = Client::getFullAddressInfo($client_id);
             return json_encode(['client_info' => $client_info]);
         }
     }

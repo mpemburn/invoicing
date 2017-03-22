@@ -37,3 +37,13 @@
   width: 100% !important;
 }
 
+div[data-datetype] {
+  position: relative;
+
+  input {
+    position: relative;
+    display: none;
+    top: -5px;
+    left: 10px;
+  }
+}

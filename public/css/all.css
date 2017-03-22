@@ -5736,13 +5736,17 @@ body {
 
 input {
   border: 1px solid #111;
-  border-radius: 3px !important; }
+  border-radius: 3px !important;
+  outline: none; }
   input:read-only {
     border: none; }
 
 input[type="submit"].short,
 input[type="button"].short {
   padding: 4px 8px; }
+
+label {
+  font-weight: normal !important; }
 
 select {
   border-radius: 3px !important; }
@@ -5832,6 +5836,18 @@ table.dataTable tbody tr:hover {
   cursor: pointer !important; }
   table.dataTable tbody tr:hover a {
     color: #000000; }
+
+.edit-item {
+  position: relative;
+  cursor: pointer; }
+  .edit-item:after {
+    content: '\f044';
+    position: absolute;
+    width: 10px;
+    right: 0;
+    font-family: 'Fontawesome';
+    color: #337ab7;
+    text-align: right; }
 
 .text-bold {
   font-weight: bold; }
@@ -6012,5 +6028,13 @@ table.dataTable tbody tr:hover {
 
 #select_client_list {
   width: 100% !important; }
+
+div[data-datetype] {
+  position: relative; }
+  div[data-datetype] input {
+    position: relative;
+    display: none;
+    top: -5px;
+    left: 10px; }
 
 /*# sourceMappingURL=all.css.map */
