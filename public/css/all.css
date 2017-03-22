@@ -5761,6 +5761,9 @@ thead td {
 
 tbody tr {
   border-bottom: 1px solid #999; }
+  tbody tr.selected {
+    background-color: #cccccc !important;
+    font-weight: bold; }
 
 tbody tr:hover {
   background-color: #dddddd;
@@ -5819,7 +5822,7 @@ table.dataTable tbody td {
     white-space: nowrap; }
   table.dataTable tbody td.right {
     text-align: right; }
-  table.dataTable tbody td.red {
+  table.dataTable tbody td.red, table.dataTable tbody td.unpaid {
     color: #ff0000; }
 
 table.dataTable tbody tr:hover {
@@ -5989,6 +5992,7 @@ table.dataTable tbody tr:hover {
   text-align: left; }
   .invoice-header .client-address {
     padding: 20px;
+    padding-top: 10px;
     border: 1px solid #111;
     font-weight: bold; }
     .invoice-header .client-address .attn {
@@ -5996,5 +6000,17 @@ table.dataTable tbody tr:hover {
 
 .invoice-lineitems table {
   width: 100%; }
+
+.client-modal {
+  margin: auto 30px; }
+
+#edit_client {
+  cursor: pointer; }
+  #edit_client i {
+    font-size: 24px;
+    color: #337ab7; }
+
+#select_client_list {
+  width: 100% !important; }
 
 /*# sourceMappingURL=all.css.map */

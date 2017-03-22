@@ -40,6 +40,11 @@ thead td {
 
 tbody tr {
   border-bottom: 1px solid #999;
+
+  &.selected {
+    background-color: #cccccc !important;
+    font-weight: bold;
+  }
 }
 
 tbody tr:hover {
@@ -129,7 +134,8 @@ table.dataTable {
       &.right {
         text-align: right;
       }
-      &.red {
+      &.red,
+      &.unpaid {
         color: #ff0000;
       }
     }

@@ -26,7 +26,7 @@
                     <td>{{ $invoice->project }}</td>
                     <td>{{ Utility::formatMjY($invoice->invoice_date) }}</td>
                     <td>{{ Utility::formatMjY($invoice->billed_date) }}</td>
-                    <td class="right {{ ($invoice->outstanding_total !== 'PAID') ? 'red' : '' }}">{{ $invoice->outstanding_total }}</td>
+                    <td class="right {{ $invoice->paid_css }}">{{ $invoice->outstanding_total }}</td>
                     <td></td>
                     <td>{{ Utility::formatMjY($invoice->paid_date) }}</td>
                     <td class="right">{{ $invoice->total_hours }}</td>

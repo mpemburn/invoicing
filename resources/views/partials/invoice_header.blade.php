@@ -3,18 +3,10 @@
         <h3>Invoice No. {{ $invoice->id }}</h3>
     </div>
     <div class="col-sm-4 client-address">
-        <div>{{ $client->top_line }}</div>
-        <div>{{ $client->address_1 }}</div>
-        @if (!empty($client->address_2))
-            <div>{{ $client->address_2 }}</div>
-        @endif
-        <div>{{ $client->city_state_zip }}</div>
-        @if (!empty($client->attention))
-            <div class="attn">{{ $client->attention }}</div>
-        @endif
-        @if (!empty($invoice->project))
-            <div class="project">Project: {{ $invoice->project }}</div>
-        @endif
+        <div id="edit_client" class="col-sm-push-11 col-sm-1"><i class="fa fa-edit"></i></div>
+        <div id="address_block" class="col-sm-12">
+            @include('partials/client_header')
+        </div>
     </div>
     <div class="col-sm-4 row">
         <div class="col-sm-4 text-right">Invoice Date:</div><div class="col-sm-8 text-bold">{{ $invoice->invoice_date }}</div>
@@ -27,3 +19,5 @@
         <div class="col-sm-4 text-right">Total Paid:</div><div class="col-sm-8 text-bold">{{ $invoice->paid_dollar_amount }}</div>
     </div>
 </header>
+
+@include('partials/client_select_modal')

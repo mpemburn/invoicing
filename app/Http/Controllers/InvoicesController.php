@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\BillingRate;
 use App\Http\Requests;
+use App\Models\Client;
 use App\Models\Invoice;
 use App\Models\InvoiceLineItem;
 use Barryvdh\DomPDF\PDF;
@@ -26,14 +27,18 @@ class InvoicesController extends Controller
         return view('invoice_list', ['invoices' => $invoices]);
     }
 
-    public function invoiceDetails($id)
+    public function invoiceDetails($id = 0)
     {
-        $invoice = Invoice::find($id);
+        $invoice = Invoice::findOrNew($id);
+        $client = new Client;
+        // Get existing client data, or a blank client record if new invoice
+        $client_data = ($id == 0) ? $client : $invoice->client_data;
 
         return view('invoice_detail', [
             'invoice' => $invoice,
-            'client' => $invoice->client_data,
-            'line_items' => $invoice->line_items
+            'client' => $client_data,
+            'line_items' => $invoice->line_items,
+            'clients' => Client::all()
         ]);
     }
 
@@ -54,11 +59,42 @@ class InvoicesController extends Controller
     }
 
     /**
+     * setClient
+     *
+     * Update client or create new invoice with for this client
+     * Designed to be called via AJAX
+     *
+     * @param $invoice_id
+     * @param $client_id
+     */
+    public function setClient($invoice_id, $client_id)
+    {
+        $is_new = ($invoice_id == 0);
+
+        $invoice = Invoice::firstOrNew([
+            'id' => $invoice_id
+        ]);
+        // Set billed_via_id foriegn key.  Use default if this is a new record
+        $billed_via_id = config('invoicing.default_billed_via_id');
+        $invoice->billed_via_id = ($invoice_id == 0) ? $billed_via_id : $invoice->billed_via_id;
+        $invoice->client_id = $client_id;
+        $invoice->save();
+
+
+        if ($is_new) {
+            return json_encode(['invoice_id' => $invoice->id]);;
+        } else {
+            $client_info = Client::getFullAddress($client_id);
+            return json_encode(['client_info' => $client_info]);
+        }
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($client_id)
     {
         //
     }

@@ -54,6 +54,23 @@ class Client extends Model
         return $this->hasMany('App\Models\Invoice');
     }
 
+    public static function getFullAddress($client_id)
+    {
+        $client = Client::find($client_id);
+
+        $full_address = [
+            'top_line' => $client->top_line,
+            'address_1' => $client->address_1,
+            'address_2' => $client->address_2,
+            'city_state_zip' => $client->city_state_zip,
+            'attention' => $client->attention,
+        ];
+        return $full_address;
+    }
+
+
+    /* Client Accessors *************************************/
+
     public function getAttentionAttribute($value)
     {
         $attn = ($this->use_attn) ? 'Attn: ' : '';
@@ -65,13 +82,14 @@ class Client extends Model
 
     public function getCityStateZipAttribute($value)
     {
-        return $this->city . ', ' . $this->state . ' ' . $this->zip_code;
+        $comma = (!empty($this->city) && !empty($this->state)) ? ', ' : '';
+        return $this->city . $comma . $this->state . ' ' . $this->zip_code;
     }
 
     public function getFullNameAttribute($value)
     {
         $middle = (empty($this->middle_name)) ? '' : $this->middle_name . ' ';
-        return $this->first_name . ' ' . $middle . $this->last_name;
+        return trim($this->first_name . ' ' . $middle . $this->last_name);
     }
 
     public function getTopLineAttribute($value)

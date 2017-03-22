@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\BilledVia;
 use App\Models\Client;
 use App\Facades\Transactions;
 use App\Helpers\Utility;
@@ -34,10 +35,15 @@ class Invoice extends Model
 
     protected $guarded = [];
 
-
+    /* Relationships ************************************************/
     public function client()
     {
         return $this->belongsTo('App\Models\Client');
+    }
+
+    public function billed_via_id()
+    {
+        return $this->hasOne('App\BilledVia');
     }
 
     /* Invoice Accessors ********************************************/
@@ -164,9 +170,12 @@ class Invoice extends Model
      */
     public function getOutstandingTotalAttribute($value)
     {
-        $outstanding = ($this->outstanding_amount != 0) ? $this->getDollarFormat($this->outstanding_amount) : 'PAID';
+        return ($this->outstanding_amount != 0) ? $this->getDollarFormat($this->outstanding_amount) : 'PAID';
+    }
 
-        return $outstanding;
+    public function getPaidCssAttribute($value)
+    {
+        return ($this->outstanding_amount != 0) ? 'unpaid' : 'paid';
     }
 
     /* Invoice Mutators *********************************************/

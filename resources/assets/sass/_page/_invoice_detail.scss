@@ -4,6 +4,7 @@
 
   .client-address {
     padding: 20px;
+    padding-top: 10px;
     border: 1px solid #111;
     font-weight: bold;
 
@@ -18,3 +19,21 @@
     width: 100%;
   }
 }
+
+.client-modal {
+  margin: auto 30px;
+}
+
+#edit_client {
+  cursor: pointer;
+
+  i {
+    font-size: 24px;
+    color: $control-blue;
+  }
+}
+
+#select_client_list {
+  width: 100% !important;
+}
+
