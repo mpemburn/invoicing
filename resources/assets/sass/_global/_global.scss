@@ -8,7 +8,8 @@ input {
   border-radius: 3px !important;
   outline: none;
 
-  &:read-only {
+  &:read-only,
+  &.datepicker {
     border: none;
   }
 }
@@ -18,6 +19,11 @@ input[type="button"] {
   &.short {
     padding: 4px 8px;
   }
+}
+
+input.datepicker {
+  border: none;
+  font-weight: bold;
 }
 
 label {

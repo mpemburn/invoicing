@@ -35,6 +35,20 @@ class Invoice extends Model
 
     protected $guarded = [];
 
+    public function saveInvoice($request)
+    {
+        $data = array_map('urldecode', $request->all());
+        // Reformat dates to a form digestible by MySql
+        $data = Utility::reformatDates($data, [
+            'invoice_date',
+            'billed_date',
+            'paid_date',
+        ], 'Y-m-d');
+
+        $this->fill($data);
+        $this->save();
+    }
+
     /* Relationships ************************************************/
     public function client()
     {

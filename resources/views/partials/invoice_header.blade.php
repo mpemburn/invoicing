@@ -9,21 +9,22 @@
         </div>
     </div>
     <div class="col-sm-4 container">
-        <form action="{{ $form_action }}">
+        <form name="details_form" action="{{ $form_action }}">
+            <input type="hidden" name="invoice_id" value="{{ $invoice->id }}">
             <div class="col-sm-12 row" data-datetype="invoice_date">
                 <label class="col-sm-5 edit-item text-right">Invoice Date</label>
                 <div class="col-sm-7 text-bold">{{ $invoice->invoice_date }}&nbsp;</div>
-                <input class="datepicker" type="text" value="{{ $invoice->invoice_date }}">
+                <input name="invoice_date" class="datepicker" type="text" value="{{ $invoice->invoice_date }}">
             </div>
             <div class="col-sm-12 row" data-datetype="billed_date">
                 <label class="col-sm-5 edit-item text-right">Date Billed</label>
                 <div class="col-sm-7 text-bold">{{ $invoice->billed_date }}&nbsp;</div>
-                <input class="datepicker" type="text" value="{{ $invoice->billed_date }}">
+                <input name="billed_date" class="datepicker" type="text" value="{{ $invoice->billed_date }}">
             </div>
             <div class="col-sm-12 row" data-datetype="paid_date">
                 <label class="col-sm-5 edit-item text-right">Date Paid</label>
                 <div class="col-sm-7 text-bold">{{ $invoice->paid_date }}&nbsp;</div>
-                <input class="datepicker" type="text" value="{{ $invoice->paid_date }}">
+                <input name="paid_date" class="datepicker" type="text" value="{{ $invoice->paid_date }}">
             </div>
         </form>
     </div>

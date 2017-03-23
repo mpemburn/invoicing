@@ -5738,12 +5738,16 @@ input {
   border: 1px solid #111;
   border-radius: 3px !important;
   outline: none; }
-  input:read-only {
+  input:read-only, input.datepicker {
     border: none; }
 
 input[type="submit"].short,
 input[type="button"].short {
   padding: 4px 8px; }
+
+input.datepicker {
+  border: none;
+  font-weight: bold; }
 
 label {
   font-weight: normal !important; }
@@ -6034,7 +6038,7 @@ div[data-datetype] {
   div[data-datetype] input {
     position: relative;
     display: none;
-    top: -5px;
-    left: 10px; }
+    top: -4px;
+    left: 11px; }
 
 /*# sourceMappingURL=all.css.map */

@@ -140,9 +140,11 @@ class InvoicesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $invoice = Invoice::find($request->invoice_id);
+        $invoice->saveInvoice($request);
+        echo json_encode(['response' => "Bingo!"]);
     }
 
     /**

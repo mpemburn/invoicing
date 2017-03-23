@@ -66,7 +66,7 @@ var InvoiceDetail = {
     clientModal: null,
     invoiceId: 0,
     dateItem: null,
-    detailsUrl: '',
+    updateUrl: '',
     selectedClientId: null,
     init: function (options) {
         $.extend(this, options);
@@ -148,7 +148,7 @@ var InvoiceDetail = {
                     }
                     // If this is a new invoice, reload
                     if (response.invoice_id) {
-                        document.location = self.detailsUrl +  response.invoice_id;
+                        document.location = self.updateUrl +  response.invoice_id;
                     }
                 },
                 error: function (response) {
@@ -156,6 +156,20 @@ var InvoiceDetail = {
                 }
             })
         }
+    },
+    saveData: function() {
+        $.ajax({
+            type: "GET",
+            url: this.updateUrl,
+            data: $('form[name=details_form]').serialize(),
+            dataType: 'json',
+            success: function (response) {
+                var foo = 'bar';
+            },
+            error: function (response) {
+                var foo = 'bar';
+            }
+        })
     },
     setEvents: function() {
         var self = this;
@@ -175,7 +189,9 @@ var InvoiceDetail = {
             // Toggle visibility of just this date item
             $dateItem.toggle(isVisible);
             $dateInput.toggle(!isVisible);
-            $dateInput.datepicker()
+            $dateInput.datepicker({
+                format: 'm/d/yyyy'
+            })
                 .on('changeDate', function () {
                     // Write the value from the input to the div
                     var $dateItem = $(this).prev('div');
@@ -184,10 +200,16 @@ var InvoiceDetail = {
                         .show();
                     $dateInput.hide();
                     $(this).datepicker('hide');
+                    appSpace.invoiceDetail.saveData();
                 })
                 .focus();
+            if (!isVisible) {
+                $dateInput.attr('readonly', 'readonly');
+            } else {
+                $dateInput.attr('readonly', 'readonly');
+            }
         });
-        $('[data-datetype] input').on('click', function(evt) {
+        $('[data-datetype] input').on('click keyup keydown', function(evt) {
             evt.preventDefault();
             return false;
         });
@@ -205,10 +227,10 @@ var InvoiceDetail = {
 
 $(document).ready(function ($) {
     if ($('#select_client_list').is('*')) {
-        var invoiceDetail = Object.create(InvoiceDetail);
-        invoiceDetail.init({
+        appSpace.invoiceDetail = Object.create(InvoiceDetail);
+        appSpace.invoiceDetail.init({
             invoiceId: appSpace.invoiceId,
-            detailsUrl: appSpace.baseUrl + '/invoice/details/'
+            updateUrl: appSpace.baseUrl + '/invoice/update/'
         });
     }
 });
