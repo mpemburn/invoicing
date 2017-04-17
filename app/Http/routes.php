@@ -32,6 +32,10 @@ Route::group(['middleware' => 'web'], function () {
         'middleware' => ['auth'],
         'uses' => 'InvoicesController@invoiceDetails'
     ]);
+    Route::get('/invoice/get_lineitem/{id}/{invoice_id}', [
+        'middleware' => ['auth'],
+        'uses' => 'InvoicesController@getLineitem'
+    ]);
     Route::get('/invoice/set_client/{id}/{client_id}', [
         'middleware' => ['auth'],
         'uses' => 'InvoicesController@setClient'

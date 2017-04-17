@@ -1,0 +1,63 @@
+/* PDF Specific */
+body {
+  font-family: Helvetica; }
+
+p {
+  margin: 0;
+  margin-bottom: 5px; }
+
+table {
+  border-collapse: collapse; }
+
+thead td {
+  padding: 4px;
+  text-align: left;
+  font-size: 9pt;
+  background-color: #999999;
+  color: #fff; }
+
+tbody tr {
+  border-bottom: 1px solid #999; }
+
+tbody td {
+  padding: 4px;
+  vertical-align: top;
+  text-align: left;
+  font-size: 9pt; }
+
+.text-right {
+  text-align: right; }
+
+.invoice-header {
+  position: relative;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 10px; }
+  .invoice-header .client-address,
+  .invoice-header .date-total {
+    position: relative;
+    height: 80px;
+    padding: 15px;
+    vertical-align: top;
+    border: 1px solid #111;
+    font-weight: bold; }
+    .invoice-header .client-address .attn,
+    .invoice-header .date-total .attn {
+      margin-top: 8px; }
+  .invoice-header .date-total table {
+    position: relative;
+    top: 40px; }
+
+.invoice-lineitems {
+  position: relative; }
+  .invoice-lineitems table {
+    width: 100%; }
+    .invoice-lineitems table tr.even {
+      background-color: #dddddd; }
+    .invoice-lineitems table tbody tr.paid {
+      font-weight: bold; }
+      .invoice-lineitems table tbody tr.paid td {
+        border-top: 1px solid #111111;
+        border-bottom: 1px solid #111111; }
+
+/*# sourceMappingURL=pdf.css.map */

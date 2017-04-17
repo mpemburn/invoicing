@@ -64,19 +64,22 @@
 var InvoiceDetail = {
     clientSelectList: null,
     clientModal: null,
+    lineitemModal: null,
     invoiceId: 0,
     dateItem: null,
+    detailsUrl: '',
     updateUrl: '',
-    selectedClientId: null,
+    selectedClientId: 0,
+    selectedLineitemId: 0,
     init: function (options) {
         $.extend(this, options);
 
-        this.clientModal = $('#client_selector');
         this.initClientTable();
         // Auto-display the client modal if this is a new invoice
         if (this.invoiceId == 0) {
             this.initClientModal();
         }
+        //this.initLineitemModal();
         this.setEvents();
     },
     initClientTable: function() {
@@ -105,11 +108,21 @@ var InvoiceDetail = {
     },
     initClientModal: function() {
         var self = this;
+        this.clientModal = $('#client_selector');
         this.clientModal.modal().on('hidden.bs.modal', function () {
             if (self.selectedClientId != null) {
                 self.retrieveClient();
             }
         });
+    },
+    initLineitemModal: function() {
+        var self = this;
+        this.lineitemModal = $('#lineitem_modal');
+        this.lineitemModal.modal()
+            .on('hidden.bs.modal', function () {
+                if (self.selectedLineitemId != null) {
+                }
+            });
     },
     hideDates: function() {
         var self = this;
@@ -148,8 +161,24 @@ var InvoiceDetail = {
                     }
                     // If this is a new invoice, reload
                     if (response.invoice_id) {
-                        document.location = self.updateUrl +  response.invoice_id;
+                        document.location = self.detailsUrl +  response.invoice_id;
                     }
+                },
+                error: function (response) {
+                    var foo = 'bar';
+                }
+            })
+        }
+    },
+    retrieveLineitem: function() {
+        var self = this;
+        if (this.selectedLineitemId != null) {
+            $.ajax({
+                type: "GET",
+                url: appSpace.baseUrl + '/invoice/get_lineitem/' + appSpace.invoiceId + '/' + this.selectedLineitemId,
+                dataType: 'json',
+                success: function (response) {
+                    self.initLineitemModal();
                 },
                 error: function (response) {
                     var foo = 'bar';
@@ -179,6 +208,24 @@ var InvoiceDetail = {
             self.initClientModal();
         });
 
+        $('#lineitem_add').on('click', function() {
+            self.retrieveLineitem();
+        });
+
+        this.setupDatepickers();
+    },
+    selectClientEvent: function() {
+        var self = this;
+        $('.client_row').on('click', function () {
+            $('.client_row').removeClass('selected');
+            self.selectedClientId = $(this).attr('data-id');
+            $(this).addClass('selected');
+            $('.btn-primary').attr('data-dismiss','modal');
+        });
+    },
+    setupDatepickers: function() {
+        var self = this;
+
         $('[data-datetype]').on('click', function() {
             var $dateItem = $(this).find('div');
             var $dateInput = $(this).find('input');
@@ -190,8 +237,9 @@ var InvoiceDetail = {
             $dateItem.toggle(isVisible);
             $dateInput.toggle(!isVisible);
             $dateInput.datepicker({
-                format: 'm/d/yyyy'
-            })
+                    format: 'm/d/yyyy',
+                    showClose: true,
+                })
                 .on('changeDate', function () {
                     // Write the value from the input to the div
                     var $dateItem = $(this).prev('div');
@@ -209,20 +257,12 @@ var InvoiceDetail = {
                 $dateInput.attr('readonly', 'readonly');
             }
         });
-        $('[data-datetype] input').on('click keyup keydown', function(evt) {
+        // Override the click behavior
+        $('[data-datetype] input').on('click', function(evt) {
             evt.preventDefault();
             return false;
         });
-    },
-    selectClientEvent: function() {
-        var self = this;
-        $('.client_row').on('click', function () {
-            $('.client_row').removeClass('selected');
-            self.selectedClientId = $(this).attr('data-id');
-            $(this).addClass('selected');
-            $('.btn-primary').attr('data-dismiss','modal');
-        });
-    },
+    }
 };
 
 $(document).ready(function ($) {
@@ -230,6 +270,7 @@ $(document).ready(function ($) {
         appSpace.invoiceDetail = Object.create(InvoiceDetail);
         appSpace.invoiceDetail.init({
             invoiceId: appSpace.invoiceId,
+            detailsUrl: appSpace.baseUrl + '/invoice/details/',
             updateUrl: appSpace.baseUrl + '/invoice/update/'
         });
     }

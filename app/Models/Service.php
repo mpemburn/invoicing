@@ -20,5 +20,10 @@ class Service extends Model
 
     protected $guarded = [];
 
-        
+    public function getServicesListAttribute($value)
+    {
+        $services = Service::orderBy('description')->get();
+        //out0fhere!
+        return $services;
+    }
 }

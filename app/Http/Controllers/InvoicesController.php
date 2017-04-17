@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Service;
+use App\Models\TransactionType;
 use Illuminate\Http\Request;
 
 use App\Models\BillingRate;
@@ -34,12 +36,22 @@ class InvoicesController extends Controller
         // Get existing client data, or a blank client record if new invoice
         $client_data = ($id == 0) ? $client : $invoice->client_data;
 
+        $transactions = TransactionType::orderBy('id')
+            ->pluck('description', 'id')
+            ->prepend('(select)', '');
+
+        $services = Service::orderBy('description')
+            ->pluck('description', 'id')
+            ->prepend('(select)', '');
+
         return view('invoice_detail', [
             'invoice' => $invoice,
             'client' => $client_data,
             'line_items' => $invoice->line_items,
             'clients' => Client::all(),
-            'form_action' => route('saveForm', $id)
+            'form_action' => route('saveForm', $id),
+            'services' => $services,
+            'transactions' => $transactions
         ]);
     }
 
@@ -57,6 +69,23 @@ class InvoicesController extends Controller
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML($html);
         return $pdf->stream();
+    }
+
+    /**
+     * getLineitem
+     */
+    public function getLineitem($invoice_id, $lineitem_id)
+    {
+        $is_new = ($lineitem_id == 0);
+        $lineitem = InvoiceLineItem::firstOrNew([
+            'id' => $lineitem_id
+        ]);
+
+        if ($is_new) {
+            return json_encode(['invoice_id' => $lineitem->id]);
+        } else {
+            return json_encode(['client_info' => $lineitem]);
+        }
     }
 
     /**
@@ -83,7 +112,7 @@ class InvoicesController extends Controller
 
 
         if ($is_new) {
-            return json_encode(['invoice_id' => $invoice->id]);;
+            return json_encode(['invoice_id' => $invoice->id]);
         } else {
             $client_info = Client::getFullAddressInfo($client_id);
             return json_encode(['client_info' => $client_info]);

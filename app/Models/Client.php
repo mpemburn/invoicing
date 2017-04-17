@@ -103,4 +103,9 @@ class Client extends Model
     {
         return preg_replace('/(.{5})(.{4})/', '\1-\2', $this->zip);
     }
+
+    public function getFoo($text)
+    {
+        return strrev($text);
+    }
 }

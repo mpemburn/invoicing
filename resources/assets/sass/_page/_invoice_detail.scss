@@ -20,8 +20,13 @@
   }
 }
 
-.client-modal {
+.client-modal,
+.lineitem-modal {
   margin: auto 30px;
+}
+
+.modal.lineitem-modal .modal-dialog  {
+  width: 800px;
 }
 
 #edit_client {
@@ -35,6 +40,14 @@
 
 #select_client_list {
   width: 100% !important;
+}
+
+#lineitem_add {
+  margin-bottom: 5px;
+}
+
+#lineitem_description {
+  margin-bottom: 10px;
 }
 
 div[data-datetype] {

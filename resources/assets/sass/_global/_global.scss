@@ -4,6 +4,7 @@ body {
 }
 
 input {
+  height: 22px;
   border: 1px solid #111;
   border-radius: 3px !important;
   outline: none;
@@ -31,6 +32,7 @@ label {
 }
 
 select {
+  font-size: 16px;
   border-radius: 3px !important;
   &:disabled {
     border: none;

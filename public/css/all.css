@@ -5735,6 +5735,7 @@ body {
   font-family: 'Arial', SansSerif; }
 
 input {
+  height: 22px;
   border: 1px solid #111;
   border-radius: 3px !important;
   outline: none; }
@@ -5753,6 +5754,7 @@ label {
   font-weight: normal !important; }
 
 select {
+  font-size: 16px;
   border-radius: 3px !important; }
   select:disabled {
     border: none; }
@@ -6021,8 +6023,12 @@ table.dataTable tbody tr:hover {
 .invoice-lineitems table {
   width: 100%; }
 
-.client-modal {
+.client-modal,
+.lineitem-modal {
   margin: auto 30px; }
+
+.modal.lineitem-modal .modal-dialog {
+  width: 800px; }
 
 #edit_client {
   cursor: pointer; }
@@ -6032,6 +6038,12 @@ table.dataTable tbody tr:hover {
 
 #select_client_list {
   width: 100% !important; }
+
+#lineitem_add {
+  margin-bottom: 5px; }
+
+#lineitem_description {
+  margin-bottom: 10px; }
 
 div[data-datetype] {
   position: relative; }
