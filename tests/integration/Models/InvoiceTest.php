@@ -20,9 +20,9 @@ class InvoiceTest extends TestCase
     ];
 
     /**
-     * @test
+     *
      */
-    public function lineItemCanBeCreated()
+    public function testLineItemCanBeCreated()
     {
         $client = $this->getClient(4);
         $this->createInvoiceWithLineItem($client, $this->dummy_item);
@@ -31,9 +31,9 @@ class InvoiceTest extends TestCase
     }
 
     /**
-     * @test
+     *
      */
-    public function totalHoursCanBeCalculated()
+    public function testTotalHoursCanBeCalculated()
     {
         $client = $this->getClient(6);
         $this->dummy_item['hours'] = 22.5;
@@ -43,9 +43,9 @@ class InvoiceTest extends TestCase
     }
 
     /**
-     * @test
+     *
      */
-    public function outStandingTotalCanBeCalculated()
+    public function testOutStandingTotalCanBeCalculated()
     {
         $amount = (22.5 * 75);
         $output = number_format($amount, 2, '.', ',');
@@ -66,9 +66,9 @@ class InvoiceTest extends TestCase
     }
 
     /**
-     * @test
+     *
      */
-    public function invoiceCanBeCreated()
+    public function testInvoiceCanBeCreated()
     {
         $client = $this->getClient(7);
         if (!is_null($client)) {

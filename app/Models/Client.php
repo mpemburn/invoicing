@@ -73,11 +73,11 @@ class Client extends Model
 
     /* Client Accessors *************************************/
 
-    public function getAttentionAttribute($value)
+    public function getAttentionAttribute()
     {
         $attn = ($this->use_attn) ? 'Attn: ' : '';
         $care_of = ($this->use_care_of) ? 'Care of: ' : '';
-        $attn_line = ($this->use_attn || $this->care_of) ? $attn . $care_of . $this->full_name : '';
+        $attn_line = ($this->use_attn || $this->use_care_of) ? $attn . $care_of . $this->full_name : '';
 
         return (empty($attn_line)) ? '' : $attn_line;
     }
