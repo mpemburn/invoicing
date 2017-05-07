@@ -8,59 +8,54 @@ use App\Models\Client;
 class ClientTest extends TestCase
 {
     /**
-     * Test accessor for get_attention if 'use_attn' is true
+     * @dataProvider getAttentionAttributeDataProvider
+     *
+     * Test accessor for get_attention under conditions specified in getAttentionAttributeDataProvider()
      */
-    public function testGetAttentionAttributeWithUseAttentionIsTrue()
+    public function testGetAttentionAttributeFormatsCorrectly($clientValues, $expectedResult)
     {
+        var_dump($clientValues);
         $client = new Client();
-        $client->fill([
-            'first_name' => 'Snuffy',
-            'last_name' => 'Smith',
-            'use_attn' => 1
-        ]);
-        $this->assertEquals('Attn: Snuffy Smith',$client->getAttentionAttribute());
+        $client->fill($clientValues);
+        $this->assertEquals($expectedResult, $client->getAttentionAttribute());
     }
 
-    /**
-     * Test accessor for get_attention if 'use_attn' is false
-     */
-    public function testGetAttentionAttributeWithUseAttentionIsFalse()
+    public function getAttentionAttributeDataProvider()
     {
-        $client = new Client();
-        $client->fill([
-            'first_name' => 'Snuffy',
-            'last_name' => 'Smith',
-            'use_attn' => 0
-        ]);
-        $this->assertEquals('',$client->getAttentionAttribute());
-    }
-
-    /**
-     * Test accessor for get_attention if 'use_care_of' is true
-     */
-    public function testGetAttentionAttributeWithUseCareOfIsTrue()
-    {
-        $client = new Client();
-        $client->fill([
-            'first_name' => 'Snuffy',
-            'last_name' => 'Smith',
-            'use_care_of' => 1
-        ]);
-        $this->assertEquals('Care of: Snuffy Smith',$client->getAttentionAttribute());
-    }
-
-    /**
-     * Test accessor for get_attention if 'use_care_of' is false
-     */
-    public function testGetAttentionAttributeWithUseCareOfIsFalse()
-    {
-        $client = new Client();
-        $client->fill([
-            'first_name' => 'Snuffy',
-            'last_name' => 'Smith',
-            'use_care_of' => 0
-        ]);
-        $this->assertEquals('',$client->getAttentionAttribute());
+        return [
+            [
+                [
+                    'first_name' => 'Snuffy',
+                    'last_name' => 'Smith',
+                    'use_attn' => 1
+                ],
+                'Attn: Snuffy Smith'
+            ],
+            [
+                [
+                    'first_name' => 'Snuffy',
+                    'last_name' => 'Smith',
+                    'use_attn' => 0
+                ],
+                ''
+            ],
+            [
+                [
+                    'first_name' => 'Snuffy',
+                    'last_name' => 'Smith',
+                    'use_care_of' => 1
+                ],
+                'Care of: Snuffy Smith'
+            ],
+            [
+                [
+                    'first_name' => 'Snuffy',
+                    'last_name' => 'Smith',
+                    'use_care_of' => 0
+                ],
+                ''
+            ],
+        ];
     }
 
 }
