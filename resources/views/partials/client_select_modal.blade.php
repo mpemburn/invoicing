@@ -28,7 +28,7 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Select</button>
+                <button id="select_client" type="button" class="btn btn-primary" data-dismiss="modal">Select</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
             </div>
         </div>

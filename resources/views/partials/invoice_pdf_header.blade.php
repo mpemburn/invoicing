@@ -1,6 +1,35 @@
 <header class="invoice-header">
     <div>
+@if(!$is_screen)
+        <div class="pdf-invoice-number">
+            <h3>Invoice No. {{ $invoice->id }}</h3>
+        </div>
+@endif
+        <div class="logo-name">
+            <div>
+                <img src="{{ URL::to('/') }}/images/pemburnia.png" />
+            </div>
+            <div>
+                <span>Pemburnia Consulting</span>
+            </div>
+        </div>
+        <div class="business-address">
+            <div>
+                3132B Nova Scotia Road
+            </div>
+            <div>
+                Bel Air, MD 21015
+            </div>
+            <div>
+                (410) 375-5877
+            </div>
+            <div>
+                mark@pemburn.com
+            </div>
+        </div>
+@if($is_screen)
         <h3>Invoice No. {{ $invoice->id }}</h3>
+@endif
     </div>
     <table width="100%">
         <tr>
@@ -18,7 +47,7 @@
                 </div>
             </td>
             <td class="total-container">
-                <div class="date-total">
+                <div class="date-and-total">
                     <table width="100%" align="right">
                         <tr>
                             <td class="text-right" width="75%">

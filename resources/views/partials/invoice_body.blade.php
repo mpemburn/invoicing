@@ -1,7 +1,9 @@
 <main class="invoice-lineitems">
+    @if($is_screen)
     <header id="lineitems_header" class="text-right">
         <button id="lineitem_add" type="button" class="btn btn-primary">Add Item</button>
     </header>
+    @endif
     <div id="lineitems_body">
         <table>
             <thead>
@@ -13,16 +15,20 @@
             </tr>
             </thead>
             <tbody>
-            @foreach ($line_items as $line_item)
-                <tr class="{{ $line_item->parity }} {{ $line_item->paid }}" data-count="{{ $line_item->counter }}">
-                    <td><p>{{ $line_item->item_number }}</p></td>
-                    <td>{!! $line_item->description_html !!}</td>
-                    <td class="text-right"><p>{{ $line_item->item_hours }}</p></td>
-                    <td class="text-right"><p>{{ $line_item->dollar_amount }}</p></td>
+            @foreach ($lineitems as $lineitem)
+                <tr class="lineitem {{ $lineitem->parity }} {{ $lineitem->paid }}" data-id="{{ $lineitem->id }}" data-count="{{ $lineitem->counter }}">
+                    <td><p>{{ $lineitem->item_number }}</p></td>
+                    <td>{!! $lineitem->description_html !!}</td>
+                    <td class="text-right"><p>{{ $lineitem->item_hours }}</p></td>
+                    <td class="text-right"><p>{{ $lineitem->dollar_amount }}</p></td>
                 </tr>
             @endforeach
             </tbody>
         </table>
     </div>
 </main>
-@include('partials/lineitem_modal')
+@if($is_screen)
+    @include('partials/lineitem_modal')
+@else
+    @include('partials/invoice_pdf_footer')
+@endif

@@ -7,22 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Service
  */
-class Service extends Model
+class ServiceType extends Model
 {
-    protected $table = 'services';
+    protected $table = 'service_types';
 
     public $timestamps = false;
 
     protected $fillable = [
         'description',
-        'rate'
     ];
 
     protected $guarded = [];
 
     public function getServicesListAttribute($value)
     {
-        $services = Service::orderBy('description')->get();
+        $services = ServiceType::orderBy('description')->get();
         return $services;
     }
 }

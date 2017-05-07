@@ -24,29 +24,52 @@ Route::group(['middleware' => 'web'], function () {
         'middleware' => ['auth'],
         'uses' => 'InvoicesController@index'
     ]);
+
     Route::get('/invoice/details', [
         'middleware' => ['auth'],
         'uses' => 'InvoicesController@invoiceDetails'
     ]);
+
     Route::get('/invoice/details/{id}', [
         'middleware' => ['auth'],
         'uses' => 'InvoicesController@invoiceDetails'
     ]);
+
     Route::get('/invoice/get_lineitem/{id}/{invoice_id}', [
         'middleware' => ['auth'],
         'uses' => 'InvoicesController@getLineitem'
     ]);
+
+    Route::get('/invoice/update_lineitem/{id}/{invoice_id}', [
+        'middleware' => ['auth'],
+        'uses' => 'InvoicesController@getLineitem'
+    ])->name('update.lineitem');
+
     Route::get('/invoice/set_client/{id}/{client_id}', [
         'middleware' => ['auth'],
         'uses' => 'InvoicesController@setClient'
     ]);
+
     Route::get('/invoice/update', [
         'middleware' => ['auth'],
         'uses' => 'InvoicesController@update'
     ])->name('saveForm');
+
     Route::get('/invoice/pdf/{id}', [
         'middleware' => ['auth'],
         'uses' => 'InvoicesController@invoicePdf'
     ]);
+
+    Route::get('/invoice/migrate', [
+        'middleware' => ['auth'],
+        'uses' => 'InvoicesController@migrate'
+    ]);
+
+    Route::get('/invoice/update_lineitem', [
+        'middleware' => ['auth'],
+        'uses' => 'InvoicesController@updateLineitem'
+    ]);
+
 });
+
 

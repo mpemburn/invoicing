@@ -33,20 +33,43 @@ tbody td {
   width: 100%;
   text-align: left;
   margin-bottom: 10px; }
+  .invoice-header .pdf-invoice-number {
+    text-align: right; }
+  .invoice-header .logo-name div {
+    display: inline; }
+    .invoice-header .logo-name div span {
+      font-size: 28pt;
+      vertical-align: middle; }
+  .invoice-header .business-address {
+    padding: 3px 0;
+    border-top: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+    font-size: 10pt; }
+    .invoice-header .business-address div {
+      display: inline;
+      padding: 0 35px; }
+    .invoice-header .business-address :first-of-type {
+      padding-left: 0; }
+    .invoice-header .business-address :last-of-type {
+      padding-right: 0;
+      text-align: right; }
   .invoice-header .client-address,
-  .invoice-header .date-total {
+  .invoice-header .date-and-total {
     position: relative;
     height: 80px;
     padding: 15px;
     vertical-align: top;
     border: 1px solid #111;
+    font-size: 12pt;
     font-weight: bold; }
     .invoice-header .client-address .attn,
-    .invoice-header .date-total .attn {
+    .invoice-header .date-and-total .attn {
       margin-top: 8px; }
-  .invoice-header .date-total table {
+  .invoice-header .date-and-total table {
     position: relative;
     top: 40px; }
+    .invoice-header .date-and-total table tr td {
+      font-size: 12pt; }
 
 .invoice-lineitems {
   position: relative; }
@@ -59,5 +82,15 @@ tbody td {
       .invoice-lineitems table tbody tr.paid td {
         border-top: 1px solid #111111;
         border-bottom: 1px solid #111111; }
+
+.footer {
+  position: fixed;
+  bottom: 40px;
+  padding: 5px 0;
+  border-top: 1px solid #000000;
+  border-bottom: 1px solid #000000;
+  text-align: center; }
+  .footer span {
+    font-size: 18px; }
 
 /*# sourceMappingURL=pdf.css.map */

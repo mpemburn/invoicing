@@ -59,36 +59,203 @@
 
 
 }(jQuery));
+var Currency = {
+    locale: 'us',
+    currency: 'usd',
+    minDigits: 2,
+    maxDigits: 2,
+    options: {},
+    formatter: null,
+    toDollar: function (amount) {
+        this._setOptions({}); // Use defaults
+        return this.formatter.format(amount)
+    },
+    toEuro: function (amount) {
+        this._setOptions({
+            locale: 'de',
+            currency: 'eur'
+        }); // Use defaults
+        return this.formatter.format(amount)
+    },
+    _setOptions: function (options) {
+        $.extend(this, options);
+        this.options = {
+            style: 'numeric',
+            currency: this.currency,
+            minimumFractionDigits: this.minDigits,
+            maximumFractionDigits: this.maxDigits
+        };
+        this.formatter = new Intl.NumberFormat(this.locale, this.options);
+    }
+}
+
+
+/**
+ * Numeric.js
+ *
+ * Simple number-based utility class
+ */
+
+var Numeric = {
+    toDollar: function(amount) {
+        return '$' + this.numberFormat(amount, 2, '.', ',') ;
+    },
+    numberFormat: function (number, decimals, dec_point, thousands_sep) {
+        number = isNaN(number * 1) ? 0 : number * 1;
+        var str = number.toFixed(decimals ? decimals : 0).toString().split('.');
+        var parts = [];
+        for (var i = str[0].length; i > 0; i -= 3) {
+            parts.unshift(str[0].substring(Math.max(0, i - 3), i));
+        }
+        str[0] = parts.join(thousands_sep ? thousands_sep : ',');
+
+        return str.join(dec_point ? dec_point : '.');
+    }
+}
+
 /* Support for Invoice Detail page */
 
+
+var InvoiceLineitem = {
+    invoiceId: 0,
+    lineitemModal: null,
+    selectedLineitemId: 0,
+    numeric: null,
+    init: function (options) {
+        $.extend(this, options);
+
+        this.numeric = Object.create(Numeric);
+        this._setEvents();
+    },
+    _initLineitemModal: function () {
+        var self = this;
+        this.lineitemModal = $('#lineitem_modal');
+        this.lineitemModal.modal();
+    },
+    _calculateAmount: function () {
+        var billing_rate = $('#billing_rate_id option:selected').text();
+        var hours = $('#hours').val();
+        var amount = 0;
+        if (billing_rate && hours) {
+            amount = (parseFloat(billing_rate) * parseFloat(hours));
+        }
+        $('#amount').val(amount.toFixed(2));
+        $('#amount_display').html(this.numeric.toDollar(amount.toFixed(2)));
+    },
+    _clearForm: function () {
+        $('#update_lineitem').each(function () {
+            $(this).find('input, select, textarea').val('');
+        });
+        this._calculateAmount();
+    },
+    _hydrateLineitem: function (data) {
+        for (var key in data) {
+            if (data.hasOwnProperty(key)) {
+                var value = (data[key] != null) ? data[key] : '';
+                var $field = $('#' + key);
+                if ($field.length > 0) {
+                    $field.val(value);
+                }
+            }
+        }
+    },
+    _retrieveLineitem: function (lineitemId) {
+        var self = this;
+        this.selectedLineitemId = lineitemId;
+        if (lineitemId != 0) {
+            $.ajax({
+                type: "GET",
+                url: appSpace.baseUrl + '/invoice/get_lineitem/' + appSpace.invoiceId + '/' + lineitemId,
+                dataType: 'json',
+                success: function (response) {
+                    self._hydrateLineitem(response.data);
+                    self._calculateAmount();
+                    self._initLineitemModal();
+                },
+                error: function (response) {
+                    var foo = 'bar';
+                }
+            });
+        } else {
+            this._clearForm();
+            this._setupNewLineitem();
+            this._initLineitemModal();
+        }
+    },
+    _saveLineitem: function() {
+        $.ajax({
+            type: "GET",
+            url: appSpace.baseUrl + '/invoice/update_lineitem',
+            data: $('form[name=update_lineitem]').serialize(),
+            dataType: 'json',
+            success: function (response) {
+                var foo = 'bar';
+                //self._hydrateLineitem(response.data);
+                //self._calculateAmount();
+                //self._initLineitemModal();
+            },
+            error: function (response) {
+                var foo = 'bar';
+            }
+        });
+    },
+    _setEvents: function () {
+        var self = this;
+        $('#lineitem_add').on('click', function () {
+            self._retrieveLineitem(0);
+        });
+
+        $('#lineitem_save').on('click', function () {
+            if (self.selectedLineitemId != null) {
+                self._saveLineitem();
+            }
+        });
+
+        $('tr.lineitem').on('click', function () {
+            var itemId = $(this).attr('data-id');
+            self._retrieveLineitem(itemId);
+        });
+
+        $('#billing_rate_id, #hours').on('change keyup', function () {
+            self._calculateAmount();
+        });
+
+    },
+    _setupNewLineitem: function() {
+        $('#id').val('0');
+        $('#invoice_id').val(this.invoiceId);
+    }
+};
+
 var InvoiceDetail = {
+    itemManager: null,
     clientSelectList: null,
     clientModal: null,
-    lineitemModal: null,
     invoiceId: 0,
     dateItem: null,
     detailsUrl: '',
     updateUrl: '',
     selectedClientId: 0,
-    selectedLineitemId: 0,
     init: function (options) {
         $.extend(this, options);
+        // Instantiate the lineitem manager
+        this.itemManager = Object.create(InvoiceLineitem);
+        this.itemManager.init({ 'invoiceId': this.invoiceId });
 
-        this.initClientTable();
+        this._initClientTable();
         // Auto-display the client modal if this is a new invoice
         if (this.invoiceId == 0) {
-            this.initClientModal();
+            this._initClientModal();
         }
-        //this.initLineitemModal();
-        this.setEvents();
+        this._setEvents();
     },
-    initClientTable: function() {
+    _initClientTable: function () {
         var self = this;
         this.clientSelectList = $('#select_client_list').DataTable({
             iDisplayLength: 10, // Default to this number per page
             aaSorting: [],
-            fnDrawCallback: function() {
-                self.selectClientEvent();
+            fnDrawCallback: function () {
+                self._selectClientEvent();
                 // Hide pagination buttons of only one page is showing
                 var $paginates = $('.dataTables_paginate').find('.paginate_button');
                 $('.dataTables_paginate').toggle($paginates.length > 3);
@@ -97,36 +264,23 @@ var InvoiceDetail = {
                 var $search = $($(this).selector + '_filter').find('input[type="search"]');
                 // Add 'clearable' x to search field, and callback to restore table on clear
                 $search.addClass('clearable').clearable({
-                    onClear: function() {
+                    onClear: function () {
                         // Refresh table
-                        self.clientSelectList.search( '' ).columns().search( '' ).draw();
+                        self.clientSelectList.search('').columns().search('').draw();
                     }
                 });
                 $('#select_client_list_length').hide();
             }
         });
     },
-    initClientModal: function() {
+    _initClientModal: function () {
         var self = this;
         this.clientModal = $('#client_selector');
-        this.clientModal.modal().on('hidden.bs.modal', function () {
-            if (self.selectedClientId != null) {
-                self.retrieveClient();
-            }
-        });
+        this.clientModal.modal();
     },
-    initLineitemModal: function() {
+    _hideDates: function () {
         var self = this;
-        this.lineitemModal = $('#lineitem_modal');
-        this.lineitemModal.modal()
-            .on('hidden.bs.modal', function () {
-                if (self.selectedLineitemId != null) {
-                }
-            });
-    },
-    hideDates: function() {
-        var self = this;
-        $('[data-datetype]').each(function() {
+        $('[data-datetype]').each(function () {
             if (this != self.dateItem) {
                 $(this).find('div').show();
                 $(this).find('input').hide();
@@ -134,12 +288,11 @@ var InvoiceDetail = {
         });
 
     },
-    hydrateClient: function(data) {
+    _hydrateClient: function (data) {
         for (var key in data) {
             if (data.hasOwnProperty(key)) {
                 var value = (data[key] != null) ? data[key] : '';
                 var $field = $('#' + key);
-                $field.hide();
                 if (value.length != 0) {
                     $field.html(value)
                         .removeClass('hidden')
@@ -148,7 +301,7 @@ var InvoiceDetail = {
             }
         }
     },
-    retrieveClient: function() {
+    _retrieveClient: function () {
         var self = this;
         if (this.selectedClientId != null) {
             $.ajax({
@@ -157,11 +310,11 @@ var InvoiceDetail = {
                 dataType: 'json',
                 success: function (response) {
                     if (response.client_info) {
-                        self.hydrateClient(response.client_info);
+                        self._hydrateClient(response.client_info);
                     }
                     // If this is a new invoice, reload
                     if (response.invoice_id) {
-                        document.location = self.detailsUrl +  response.invoice_id;
+                        document.location = self.detailsUrl + response.invoice_id;
                     }
                 },
                 error: function (response) {
@@ -170,23 +323,7 @@ var InvoiceDetail = {
             })
         }
     },
-    retrieveLineitem: function() {
-        var self = this;
-        if (this.selectedLineitemId != null) {
-            $.ajax({
-                type: "GET",
-                url: appSpace.baseUrl + '/invoice/get_lineitem/' + appSpace.invoiceId + '/' + this.selectedLineitemId,
-                dataType: 'json',
-                success: function (response) {
-                    self.initLineitemModal();
-                },
-                error: function (response) {
-                    var foo = 'bar';
-                }
-            })
-        }
-    },
-    saveData: function() {
+    _saveData: function () {
         $.ajax({
             type: "GET",
             url: this.updateUrl,
@@ -200,39 +337,41 @@ var InvoiceDetail = {
             }
         })
     },
-    setEvents: function() {
+    _setEvents: function () {
         var self = this;
-        this.selectClientEvent();
+        this._selectClientEvent();
 
-        $('#edit_client').on('click', function() {
-            self.initClientModal();
+        $('#edit_client').on('click', function () {
+            self._initClientModal();
         });
 
-        $('#lineitem_add').on('click', function() {
-            self.retrieveLineitem();
+        $('#select_client').on('click', function () {
+            if (self.selectedClientId != null) {
+                self._retrieveClient();
+            }
         });
 
-        this.setupDatepickers();
+        this._setupDatepickers();
     },
-    selectClientEvent: function() {
+    _selectClientEvent: function () {
         var self = this;
         $('.client_row').on('click', function () {
             $('.client_row').removeClass('selected');
             self.selectedClientId = $(this).attr('data-id');
             $(this).addClass('selected');
-            $('.btn-primary').attr('data-dismiss','modal');
+            $('.btn-primary').attr('data-dismiss', 'modal');
         });
     },
-    setupDatepickers: function() {
+    _setupDatepickers: function () {
         var self = this;
 
-        $('[data-datetype]').on('click', function() {
+        $('[data-datetype]').on('click', function () {
             var $dateItem = $(this).find('div');
             var $dateInput = $(this).find('input');
             var isVisible = $dateInput.is(':visible');
             // Hide dates except for the current one
             self.dateItem = this;
-            self.hideDates();
+            self._hideDates();
             // Toggle visibility of just this date item
             $dateItem.toggle(isVisible);
             $dateInput.toggle(!isVisible);
@@ -248,7 +387,7 @@ var InvoiceDetail = {
                         .show();
                     $dateInput.hide();
                     $(this).datepicker('hide');
-                    appSpace.invoiceDetail.saveData();
+                    appSpace.invoiceDetail._saveData();
                 })
                 .focus();
             if (!isVisible) {
@@ -258,7 +397,7 @@ var InvoiceDetail = {
             }
         });
         // Override the click behavior
-        $('[data-datetype] input').on('click', function(evt) {
+        $('[data-datetype] input').on('click', function (evt) {
             evt.preventDefault();
             return false;
         });

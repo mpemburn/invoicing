@@ -20,5 +20,8 @@ class BillingRate extends Model
 
     protected $guarded = [];
 
-        
+    public function getBillingRateAttribute($value)
+    {
+        return number_format($value, 2);
+    }
 }

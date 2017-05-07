@@ -1,26 +1,59 @@
+
 .invoice-header {
   position: relative;
   width: 100%;
   text-align: left;
   margin-bottom: 10px;
-
+  .pdf-invoice-number {
+    text-align: right;
+  }
+  .logo-name {
+    div {
+      display: inline;
+      span {
+        font-size: 28pt;
+        vertical-align: middle;
+      }
+    }
+  }
+  .business-address {
+    padding: 3px 0;
+    border-top: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+    font-size: 10pt;
+    div {
+      display: inline;
+      padding: 0 35px;
+    }
+    :first-of-type {
+      padding-left: 0;
+    }
+    :last-of-type {
+      padding-right: 0;
+      text-align: right;
+    }
+  }
   .client-address,
-  .date-total {
+  .date-and-total {
     position: relative;
     height: 80px;
     padding: 15px;
     vertical-align: top;
     border: 1px solid #111;
+    font-size: 12pt;
     font-weight: bold;
 
     .attn {
       margin-top: 8px;
     }
   }
-  .date-total {
+  .date-and-total {
     table {
       position: relative;
       top: 40px;
+      tr td {
+        font-size: 12pt;
+      }
     }
   }
 }
@@ -44,5 +77,16 @@
         border-bottom: 1px solid #111111;
       }
     }
+  }
+}
+.footer {
+  position: fixed;
+  bottom: 40px;
+  padding: 5px 0;
+  border-top: 1px solid #000000;
+  border-bottom: 1px solid #000000;
+  text-align: center;
+  span {
+    font-size: 18px;
   }
 }

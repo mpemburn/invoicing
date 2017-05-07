@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Service;
+use App\Models\ServiceType;
 use App\Models\TransactionType;
 use Illuminate\Http\Request;
 
@@ -40,18 +40,24 @@ class InvoicesController extends Controller
             ->pluck('description', 'id')
             ->prepend('(select)', '');
 
-        $services = Service::orderBy('description')
+        $services = ServiceType::orderBy('description')
             ->pluck('description', 'id')
             ->prepend('(select)', '');
 
+        $billing_rates = BillingRate::orderBy('billing_rate')
+            ->pluck('billing_rate', 'id')
+            ->prepend('(select)', '');
+
         return view('invoice_detail', [
+            'is_screen' => true,
             'invoice' => $invoice,
             'client' => $client_data,
-            'line_items' => $invoice->line_items,
+            'lineitems' => $invoice->line_items,
             'clients' => Client::all(),
             'form_action' => route('saveForm', $id),
             'services' => $services,
-            'transactions' => $transactions
+            'transactions' => $transactions,
+            'billing_rates' => $billing_rates
         ]);
     }
 
@@ -59,9 +65,10 @@ class InvoicesController extends Controller
     {
         $invoice = Invoice::find($id);
         $view = view('invoice_pdf', [
+            'is_screen' => false,
             'invoice' => $invoice,
             'client' => $invoice->client_data,
-            'line_items' => $invoice->line_items
+            'lineitems' => $invoice->line_items
         ]);
 
         $html = $view->render();
@@ -78,13 +85,18 @@ class InvoicesController extends Controller
     {
         $is_new = ($lineitem_id == 0);
         $lineitem = InvoiceLineItem::firstOrNew([
+            'invoice_id' => $invoice_id,
             'id' => $lineitem_id
         ]);
-
+        $next_number = $lineitem->next_item_number;
         if ($is_new) {
-            return json_encode(['invoice_id' => $lineitem->id]);
+            return json_encode([
+                'is_new' => true,
+                'invoice_id' => $invoice_id,
+                'item_number' => $next_number
+            ]);
         } else {
-            return json_encode(['client_info' => $lineitem]);
+            return json_encode(['data' => $lineitem]);
         }
     }
 
@@ -117,6 +129,15 @@ class InvoicesController extends Controller
             $client_info = Client::getFullAddressInfo($client_id);
             return json_encode(['client_info' => $client_info]);
         }
+    }
+
+    public function updateLineitem(Request $request)
+    {
+        $lineitem = new InvoiceLineItem();
+        $lineitem->update($request->all(), [
+            'id' => $request->id,
+            'invoice_id' => $request->invoice_id
+        ]);
     }
 
     /**
@@ -192,6 +213,11 @@ class InvoicesController extends Controller
      */
     public function migrate()
     {
+
+    }
+
+    private function migrateAmounts()
+    {
         $invoices = Invoice::all();
 
         $rates = [];
@@ -207,7 +233,7 @@ class InvoicesController extends Controller
                         if ($hours > 0 && !is_null($hours)) {
                             $amount = ($amount == 87.50) ? 82.50 : $amount;
                             //if (($amount / $hours) == 0) {
-                               // echo $invoice_id . ' ' . round($amount / $hours) . '<br>'; //floatval($line_item->amount) / floatval($line_item->hours) . '<br>';
+                            // echo $invoice_id . ' ' . round($amount / $hours) . '<br>'; //floatval($line_item->amount) / floatval($line_item->hours) . '<br>';
                             //}
 
                             $rate = round($amount / $hours);
@@ -228,11 +254,63 @@ class InvoicesController extends Controller
                 }
             }
         }
-//        sort($rates);
-//        foreach ($rates as $rate) {
-//            $billing_rate = new BillingRate();
-//            $billing_rate->billing_rate = $rate;
-//            $billing_rate->save();
-//        }
+    }
+
+    private function migrateServices()
+    {
+        $lineitems = InvoiceLineItem::where('transaction_type', 1)->get();
+        $count =  0;
+        foreach ($lineitems as $lineitem) {
+            $rate = 0;
+            $service = $lineitem->service;
+            if (preg_match('/(?<=\$)\d+(\.\d+)?\b/', $service, $regs)) {
+                $rate = $regs[0];
+            }
+            $service_types = ServiceType::all()
+                ->pluck('description', 'id')
+                ->toArray();
+
+            $rate_ids = BillingRate::where('billing_rate', $rate)
+                ->pluck('id')
+                ->toArray();
+            if (!empty($rate_ids)) {
+                $billing_rate_id = $rate_ids[0];
+                switch (true) {
+                    case (stristr($service, 'data') !== false):
+                        $filter = 'data';
+                        break;
+                    case (stristr($service, 'web') !== false):
+                        $filter = 'web';
+                        break;
+                    case (stristr($service, 'cons') !== false):
+                        $filter = 'cons';
+                        break;
+                    case (stristr($service, 'soft') !== false):
+                    case (stristr($service, 'prog') !== false):
+                        $filter = 'prog';
+                        break;
+                    case (stristr($service, 'research') !== false):
+                        $filter = 'research';
+                        break;
+                    default:
+                        $filter = '';
+                }
+                if (!empty($filter)) {
+                    //var_dump($service_rates);
+                    $filtered = array_filter($service_types, function ($elem) use ($filter) {
+                        return (stristr($elem, $filter) !== false);
+                    }, ARRAY_FILTER_USE_BOTH);
+                    if (!empty($filtered)) {
+                        $service_type_id = key($filtered);
+                        echo $service_types[$service_type_id] . '<br>';
+                        $lineitem->service_type = $service_type_id;
+                        $lineitem->billing_rate_id = $billing_rate_id;
+                        $lineitem->save();
+                    }
+                    $count++;
+                }
+            }
+        }
+        echo 'Count: ' . $count;
     }
 }
